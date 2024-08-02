@@ -1,23 +1,27 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
-  </PropertyGroup>
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net8.0</TargetFramework>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Include="Database.fs" />
-    <Compile Include="Model.fs" />
-    <Compile Include="Store.fs" />
-    <Compile Include="Web.fs" />
-    <Compile Include="Program.fs" />
-  </ItemGroup>
+    <ItemGroup>
+        <Compile Include="Model\Validation\Guardian.fs" />
+        <Compile Include="Model\Model.fs"/>
+        <Compile Include="Application\Application.fs"/>
+        <Compile Include="Application\Participant.fs" />
+        <Compile Include="Data\Database.fs"/>
+        <Compile Include="Data\Adapter.fs"/>
+        <Compile Include="Data\Store.fs"/>
+        <Compile Include="Service\Web.fs"/>
+        <Compile Include="Program.fs"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Giraffe" Version="6.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="Thoth.Json.Giraffe" Version="6.0.0-beta-001" />
-    <PackageReference Include="Thoth.Json.Net" Version="8.0.0" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Giraffe" Version="6.0.0"/>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1"/>
+        <PackageReference Include="Thoth.Json.Giraffe" Version="6.0.0-beta-001"/>
+        <PackageReference Include="Thoth.Json.Net" Version="8.0.0"/>
+    </ItemGroup>
 
 </Project>
