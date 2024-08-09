@@ -1,13 +1,8 @@
-namespace Rommulbad
+﻿namespace Rommulbad.Domain
 
-open Thoth.Json.Net
-open Thoth.Json.Giraffe
 open System
-// Names are words separated by spaces
-// GuardianId must be a valid guardian id (see below)
-// Diploma is the highest diploma obtained by the candidate. It can be
-// - an empty string meaning no diploma
-// - or the strings "A", "B", or "C".
+open Thoth.Json.Net
+
 type Candidate =
     { Name: string
       GuardianId: string
@@ -27,11 +22,6 @@ module Candidate =
               GuardianId = get.Required.Field "guardian_id" Decode.string
               Diploma = get.Required.Field "diploma" Decode.string })
 
-/// Swimming session registered on a specific date
-///
-/// A Swimming session can be in the deep or shallow pool
-/// Minutes cannot be negative or larger than 30
-/// Only the year, month and date of Date are used.
 type Session =
     { Deep: bool
       Date: DateTime
@@ -40,7 +30,6 @@ type Session =
 module Session =
     let encode: Encoder<Session> =
         fun session ->
-
             Encode.object
                 [ "deep", Encode.bool session.Deep
                   "date", Encode.datetime session.Date
@@ -52,10 +41,21 @@ module Session =
               Date = get.Required.Field "date" Decode.datetime
               Minutes = get.Required.Field "amount" Decode.int })
 
-/// A guardian has an Id (3 digits followed by a dash and 4 letters),
-/// a Name (only letters and spaces, but cannot contain two or more consecutive spaces),
-/// and a list of Candidates (which may be empty)
 type Guardian =
     { Id: string
       Name: string
       Candidates: List<Candidate> }
+
+module Guardian =
+    let encode: Encoder<Guardian> =
+        fun guardian ->
+            Encode.object
+                [ "id", Encode.string guardian.Id
+                  "name", Encode.string guardian.Name
+                  "candidates", guardian.Candidates |> List.map Candidate.encode |> Encode.list ]
+
+    let decode: Decoder<Guardian> =
+        Decode.object (fun get ->
+            { Id = get.Required.Field "id" Decode.string
+              Name = get.Required.Field "name" Decode.string
+              Candidates = get.Required.Field "candidates" (Decode.list Candidate.decode) })

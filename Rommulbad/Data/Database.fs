@@ -1,10 +1,10 @@
-/// ====================================
-/// ==== DO NOT CHANGE THIS FILE    ====
-/// ====                            ====
-/// ==== You do not have to alter   ====
-/// ==== this file for the          ====
-/// ==== assessment                 ====
-/// ====================================
+// ====================================
+// ==== DO NOT CHANGE THIS FILE    ====
+// ====                            ====
+// ==== You do not have to alter   ====
+// ==== this file for the          ====
+// ==== assessment                 ====
+// ====================================
 namespace Rommulbad.Database
 
 type InsertError = UniquenessError of string
@@ -40,4 +40,4 @@ module InMemoryDatabase =
 
     let all store = Map.values store.Data
 
-    let filter (pred: ('T -> bool)) store = all store |> Seq.filter pred
+    let filter (pred: 'T -> bool) store = all store |> Seq.filter pred

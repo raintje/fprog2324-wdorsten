@@ -1,6 +1,6 @@
 module Rommulbad.Web
 
-open Rommulbad
+open Rommulbad.Domain
 open Rommulbad.Database
 open Rommulbad.Store
 open Giraffe
