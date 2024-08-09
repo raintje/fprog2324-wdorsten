@@ -6,8 +6,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="Model\Validation\Guardian.fs" />
-        <Compile Include="Model\Model.fs"/>
         <Compile Include="Application\Application.fs"/>
         <Compile Include="Application\Participant.fs" />
         <Compile Include="Data\Database.fs"/>
@@ -15,6 +13,11 @@
         <Compile Include="Data\Store.fs"/>
         <Compile Include="Service\Web.fs"/>
         <Compile Include="Program.fs"/>
+        <Folder Include="Test\" />
+        <Compile Include="Domain\Session.fs" />
+        <Compile Include="Domain\Model.fs" />
+        <Compile Include="Domain\Candidate.fs" />
+        <Compile Include="Domain\Guardian.fs" />
     </ItemGroup>
 
     <ItemGroup>
