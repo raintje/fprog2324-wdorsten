@@ -1,7 +1,6 @@
-module Rommulbad.Store
+namespace Rommulbad.Data
 
 open System
-open Rommulbad.Database
 
 /// Here a store is created that contains the following tables with the following attributes
 ///

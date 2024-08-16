@@ -6,15 +6,16 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="Domain\Domain.fs" />
         <Compile Include="Domain\Validation\Candidate.fs"/>
         <Compile Include="Domain\Validation\Guardian.fs"/>
         <Compile Include="Domain\Validation\Session.fs"/>
-        <Compile Include="Data\Adapter.fs"/>
+        <Compile Include="Domain\Domain.fs"/>
+        <Compile Include="Application\Application.fs"/>
+        <Compile Include="Application\Candidate.fs"/>
+        <Compile Include="Application\Session.fs"/>
         <Compile Include="Data\Database.fs"/>
         <Compile Include="Data\Store.fs"/>
-        <Compile Include="Application\Application.fs"/>
-        <Compile Include="Application/Candidate.fs"/>
+        <Compile Include="Data\Adapter.fs" />
         <Compile Include="Service\Web.fs"/>
         <Compile Include="Program.fs"/>
     </ItemGroup>

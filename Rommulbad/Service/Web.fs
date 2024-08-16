@@ -2,6 +2,7 @@ module Rommulbad.Web
 
 open Rommulbad.Domain
 open Rommulbad.Database
+open Rommulbad.Application
 open Rommulbad.Store
 open Giraffe
 open Thoth.Json.Net
@@ -24,25 +25,18 @@ let getCandidates: HttpHandler =
         }
 
 let getCandidate (name: string) : HttpHandler =
+    let candidateName = CandidateName name
+
     fun next ctx ->
         task {
-            let store = ctx.GetService<Store>()
+            let candidateService =
+                ctx.RequestServices.GetService(typeof<ICandidate>) :?> ICandidate
 
-            let candidate = InMemoryDatabase.lookup name store.candidates
-
+            let candidate = Candidate.get candidateService candidateName
 
             match candidate with
-            | None -> return! RequestErrors.NOT_FOUND "Employee not found!" next ctx
-            | Some(name, _, gId, dpl) ->
-                return!
-                    ThothSerializer.RespondJson
-                        { Name = name
-                          GuardianId = gId
-                          Diploma = dpl }
-                        Candidate.encode
-                        next
-                        ctx
-
+            | Some candidate -> return! ThothSerializer.RespondJson candidate Candidate.encode next ctx
+            | None -> return! RequestErrors.NOT_FOUND "Candidate not found" next ctx
         }
 
 let addSession (name: string) : HttpHandler =

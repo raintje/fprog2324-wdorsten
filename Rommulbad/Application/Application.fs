@@ -1,6 +1,7 @@
 ﻿namespace Rommulbad.Application
 
-open Rommulbad.Domain
+open System
 
-type CandidateId = CandidateId of string
+type CandidateName = CandidateName of string
 type GuardianId = GuardianId of string
+type SessionTuple = SessionTuple of CandidateName * bool * DateTime * int

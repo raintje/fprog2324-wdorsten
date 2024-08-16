@@ -5,7 +5,7 @@
 // ==== this file for the          ====
 // ==== assessment                 ====
 // ====================================
-namespace Rommulbad.Database
+namespace Rommulbad.Data
 
 type InsertError = UniquenessError of string
 
@@ -21,7 +21,7 @@ module InMemoryDatabase =
 
     let insert (key: 'Key) value store : Result<unit, InsertError> =
         if Map.containsKey key store.Data then
-            sprintf "Key %O taken" key |> UniquenessError |> Error
+            $"Key {key} taken" |> UniquenessError |> Error
         else
             store.Data <- Map.add key value store.Data
             Ok()
