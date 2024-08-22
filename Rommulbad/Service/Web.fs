@@ -30,9 +30,9 @@ let getCandidate (name: string) : HttpHandler =
     fun next ctx ->
         task {
             let candidateService =
-                ctx.RequestServices.GetService(typeof<ICandidate>) :?> ICandidate
+                ctx.RequestServices.GetService(typeof<CandidateService>) :?> CandidateService
 
-            let candidate = Candidate.get candidateService candidateName
+            let candidate = Candidate.getOne candidateService candidateName
 
             match candidate with
             | Some candidate -> return! ThothSerializer.RespondJson candidate Candidate.encode next ctx

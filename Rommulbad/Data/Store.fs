@@ -2,22 +2,6 @@ namespace Rommulbad.Data
 
 open System
 
-/// Here a store is created that contains the following tables with the following attributes
-///
-/// candidates (primary key is name)
-/// - name (consists of words seperated by spaces)
-/// - date of birth
-/// - guardian id (see guardian id)
-/// - highest swimming diploma (A, B, or C, with C being the highest)
-///
-/// sessions (primary key is compound: candidate name and date)
-/// - candidate name (foreign key to employees)
-/// - date
-/// - minutes(int)
-///
-/// guardians
-/// - id (3 digits followed by dash and 4 letters, e.g. 133-LEET)
-/// - name (consists of words separated by spaces)
 type Store() =
     member val candidates: InMemoryDatabase<string, string * DateTime * string * string> =
         [ "Eleanor", DateTime(2016, 1, 9), "123-ABCD", "A"

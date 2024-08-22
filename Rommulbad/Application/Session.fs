@@ -2,13 +2,19 @@
 
 open System
 
-type ISession =
+type SessionService =
     abstract member GetSessions: CandidateName -> seq<string * bool * DateTime * int>
-    abstract member AddSession: SessionTuple -> unit
+    abstract member AddSession: CandidateName * bool * DateTime * int -> unit
+    abstract member GetSessionsForDiploma: CandidateName * DiplomaKey -> seq<string * bool * DateTime * int>
 
 module Session =
-    let set (service: ISession) (SessionTuple(candidate, deep, date, minutes)) =
-        service.AddSession(SessionTuple(candidate, deep, date, minutes))
+    let set (service: SessionService) (candidate, deep, date, minutes) =
+        service.AddSession(candidate, deep, date, minutes)
 
-    let get (service: ISession) (CandidateName name) =
+    let get (service: SessionService) (CandidateName name) =
         service.GetSessions(CandidateName name) |> Seq.map id |> Seq.toList
+
+    let getSessionsForDiploma (service: SessionService) (CandidateName name, DiplomaKey diploma) =
+        service.GetSessionsForDiploma(CandidateName name, DiplomaKey diploma)
+        |> Seq.map id
+        |> Seq.toList

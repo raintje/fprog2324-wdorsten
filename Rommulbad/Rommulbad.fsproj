@@ -13,6 +13,8 @@
         <Compile Include="Application\Application.fs"/>
         <Compile Include="Application\Candidate.fs"/>
         <Compile Include="Application\Session.fs"/>
+        <Compile Include="Application\Guardian.fs" />
+        <Compile Include="Application\Encoder.fs" />
         <Compile Include="Data\Database.fs"/>
         <Compile Include="Data\Store.fs"/>
         <Compile Include="Data\Adapter.fs" />

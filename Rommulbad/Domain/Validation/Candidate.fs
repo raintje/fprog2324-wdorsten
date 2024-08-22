@@ -14,5 +14,14 @@ module Candidate =
         && hasNoMoreThanTwoConsecutiveSpaces name
         && hasCapitalizedFirstLetters name
 
-    let private validateDiploma (diploma: string) =
+    let private isValidSessionHours (diploma: string, hours: int) =
+        match diploma with
+        | "A" -> hours >= 1 && hours <= 9
+        | "B" -> hours >= 10 && hours <= 14
+        | "C" -> hours >= 15
+        | _ -> false
+
+    let private isValidDiplomaKey (diploma: string) =
         diploma = "" || diploma = "A" || diploma = "B" || diploma = "C"
+
+    let isValidDiploma (diploma: string) = isValidDiplomaKey diploma

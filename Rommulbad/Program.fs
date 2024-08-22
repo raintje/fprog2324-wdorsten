@@ -20,9 +20,15 @@ let configureServices (services: IServiceCollection) =
         .AddGiraffe()
         .AddSingleton<Store>(Store())
         .AddSingleton<Json.ISerializer>(ThothSerializer(skipNullField = false, caseStrategy = CaseStrategy.CamelCase))
-        .AddScoped<ICandidate>(fun serviceProvider -> 
+        .AddScoped<CandidateService>(fun serviceProvider ->
             let store = serviceProvider.GetService(typeof<Store>) :?> Store
-            CandidateDAO(store) :> ICandidate) 
+            CandidateDAO(store) :> CandidateService)
+        .AddScoped<SessionService>(fun serviceProvider ->
+            let store = serviceProvider.GetService(typeof<Store>) :?> Store
+            SessionDAO(store) :> SessionService)
+        .AddScoped<GuardianService>(fun serviceProvider ->
+            let store = serviceProvider.GetService(typeof<Store>) :?> Store
+            GuardianDAO(store) :> GuardianService)
     |> ignore
 
 [<EntryPoint>]
