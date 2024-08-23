@@ -5,8 +5,8 @@ open Rommulbad.Domain.Validation
 open Rommulbad.Domain.Validation.Candidate
 
 type CandidateService =
-    abstract member GetCandidate: CandidateName -> Option<CandidateName * System.DateTime * GuardianId * DiplomaKey>
-    abstract member GetCandidates: unit -> seq<CandidateName * System.DateTime * GuardianId * DiplomaKey>
+    abstract member GetCandidate: CandidateName -> Option<string * System.DateTime * string * string>
+    abstract member GetCandidates: unit -> seq<string * System.DateTime * string * string>
     abstract member SubmitCandidate: CandidateName * System.DateTime * GuardianId * string -> unit
     abstract member SetCandidateDiploma: CandidateName * DiplomaKey -> unit
 
@@ -34,8 +34,8 @@ module Candidate =
         else
             Error $"Invalid candidate name: {name}"
 
-    let setDiploma (candidateService: CandidateService) (CandidateName name, DiplomaKey diploma) =
-        if Candidate.isValidDiploma diploma then
+    let setDiploma (candidateService: CandidateService) (CandidateName name, DiplomaKey diploma, minutes: int) =
+        if Candidate.isValidDiploma (diploma, minutes) then
             candidateService.SetCandidateDiploma(CandidateName name, DiplomaKey diploma)
             Ok $"Diploma of participant {name} has been set to {diploma}"
         else

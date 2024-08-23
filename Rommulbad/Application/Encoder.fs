@@ -1,5 +1,6 @@
 ﻿namespace Rommulbad.Application.Encoder
 
+open Rommulbad.Application
 open Rommulbad.Domain
 open Thoth.Json.Net
 
@@ -18,6 +19,14 @@ module Candidate =
               DateOfBirth = get.Required.Field "date_of_birth" Decode.datetime
               GuardianId = get.Required.Field "guardian_id" Decode.string
               Diploma = get.Required.Field "diploma" Decode.string })
+
+
+module SetDiplomaRequest =
+    let encode: Encoder<SetDiplomaRequest> =
+        fun request -> Encode.object [ "diploma", Encode.string request.Diploma ]
+
+    let decode: Decoder<SetDiplomaRequest> =
+        Decode.object (fun get -> { Diploma = get.Required.Field "diploma" Decode.string })
 
 module Session =
     let encode: Encoder<Session> =

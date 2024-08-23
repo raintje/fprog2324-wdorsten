@@ -26,13 +26,10 @@ type SessionDAO(store: Store) =
 
 type GuardianDAO(store: Store) =
     interface GuardianService with
-        member this.GetAllGuardians() =
-            InMemoryDatabase.all store.guardians
-            |> Seq.map (fun (id, name) -> (GuardianId id, GuardianName name))
+        member this.GetAllGuardians() = InMemoryDatabase.all store.guardians
 
         member this.GetGuardian(GuardianId gid) =
             InMemoryDatabase.lookup gid store.guardians
-            |> Option.map (fun (id, name) -> (GuardianId id, GuardianName name))
 
         member this.RegisterGuardian(GuardianId gid, GuardianName name) =
             InMemoryDatabase.insert (string gid) (string gid, name) store.guardians
@@ -42,11 +39,8 @@ type CandidateDAO(store: Store) =
     interface CandidateService with
         member this.GetCandidate(CandidateName name) =
             InMemoryDatabase.lookup name store.candidates
-            |> Option.map (fun (n, dob, gId, d) -> (CandidateName n, dob, GuardianId gId, DiplomaKey d))
 
-        member this.GetCandidates() =
-            InMemoryDatabase.all store.candidates
-            |> Seq.map (fun (n, dob, gId, d) -> (CandidateName n, dob, GuardianId gId, DiplomaKey d))
+        member this.GetCandidates() = InMemoryDatabase.all store.candidates
 
         member this.SetCandidateDiploma(CandidateName name, DiplomaKey diploma) =
             let candidate =
@@ -54,17 +48,8 @@ type CandidateDAO(store: Store) =
                 | Some(n, dob, gId, _) -> (n, dob, gId, diploma)
                 | None -> failwith $"Candidate with name {name} not found."
 
-            let sessionDuration =
-                (SessionDAO(store) :> SessionService)
-                    .GetSessionsForDiploma(CandidateName name, DiplomaKey diploma)
-                |> Seq.map (fun (_, _, _, m) -> m)
-                |> Seq.sum
+            InMemoryDatabase.update name candidate store.candidates
 
-            match diploma with
-            | "A" when sessionDuration >= 120 -> InMemoryDatabase.update name candidate store.candidates
-            | "B" when sessionDuration >= 150 -> InMemoryDatabase.update name candidate store.candidates
-            | "C" when sessionDuration >= 180 -> InMemoryDatabase.update name candidate store.candidates
-            | _ -> failwith $"Candidate {name} has not met the requirements for diploma {diploma}."
 
         member this.SubmitCandidate(CandidateName name, dob: System.DateTime, GuardianId gid, diploma: string) =
             InMemoryDatabase.insert (string name) (string name, dob, string gid, diploma) store.candidates

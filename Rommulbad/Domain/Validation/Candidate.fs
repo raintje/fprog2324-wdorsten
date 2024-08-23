@@ -24,4 +24,12 @@ module Candidate =
     let private isValidDiplomaKey (diploma: string) =
         diploma = "" || diploma = "A" || diploma = "B" || diploma = "C"
 
-    let isValidDiploma (diploma: string) = isValidDiplomaKey diploma
+    let private hasMinimumMinutes (diploma: string, minutes: int) =
+        match diploma with
+        | "A" -> minutes >= 120
+        | "B" -> minutes >= 150
+        | "C" -> minutes >= 180
+        | _ -> false
+
+    let isValidDiploma (diploma: string, minutes: int) =
+        isValidDiplomaKey diploma && hasMinimumMinutes (diploma, minutes)

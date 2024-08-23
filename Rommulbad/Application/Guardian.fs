@@ -2,11 +2,11 @@
 
 type GuardianService =
     abstract member RegisterGuardian: GuardianId * GuardianName -> unit
-    abstract member GetGuardian: GuardianId -> Option<GuardianId * GuardianName>
-    abstract member GetAllGuardians: unit -> seq<GuardianId * GuardianName>
+    abstract member GetGuardian: GuardianId -> Option<string * string>
+    abstract member GetAllGuardians: unit -> seq<string * string>
 
 module Guardian =
-    let set (service: GuardianService) (id, name) = service.RegisterGuardian(id, name)
+    let register (service: GuardianService) (id, name) = service.RegisterGuardian(id, name)
 
     let getOne (service: GuardianService) id = service.GetGuardian(id)
 
