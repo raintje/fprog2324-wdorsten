@@ -19,7 +19,7 @@ type SessionDAO(store: Store) =
         // C       | not allowed  | 15        | 180
         member this.GetSessionsForDiploma(CandidateName name, DiplomaKey diploma) =
             match diploma with
-            | "A" -> InMemoryDatabase.filter (fun (c, _, _, m) -> c = name && m >= 1) store.sessions
+            | "A" -> InMemoryDatabase.filter (fun (c, _, _, _) -> c = name) store.sessions
             | "B" -> InMemoryDatabase.filter (fun (c, d, _, m) -> c = name && d = true && m >= 10) store.sessions
             | "C" -> InMemoryDatabase.filter (fun (c, d, _, m) -> c = name && d = true && m >= 15) store.sessions
             | _ -> failwith $"${diploma} given. Expected: A, B or C."

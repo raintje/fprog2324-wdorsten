@@ -66,15 +66,23 @@ let getSessions (name: string) : HttpHandler =
             let sessionService =
                 ctx.RequestServices.GetService(typeof<SessionService>) :?> SessionService
 
-            let sessions =
-                sessionService.GetSessions(CandidateName name)
-                |> Seq.map (fun (n, d, dt, a) ->
-                    { Candidate = string n
-                      Deep = d
-                      Date = dt
-                      Minutes = a })
+            let candidateService =
+                ctx.RequestServices.GetService(typeof<CandidateService>) :?> CandidateService
 
-            return! ThothSerializer.RespondJsonSeq sessions Session.encode next ctx
+            let candidate = Candidate.getOne candidateService (CandidateName name)
+
+            match candidate with
+            | None -> return! RequestErrors.NOT_FOUND $"No candidate found with name {name}" next ctx
+            | Some _ ->
+                let sessions =
+                    sessionService.GetSessions(CandidateName name)
+                    |> Seq.map (fun (n, d, dt, a) ->
+                        { Candidate = string n
+                          Deep = d
+                          Date = dt
+                          Minutes = a })
+
+                return! ThothSerializer.RespondJsonSeq sessions Session.encode next ctx
         }
 
 let getTotalMinutes (name: string) : HttpHandler =
@@ -97,26 +105,32 @@ let setDiploma (name: string) : HttpHandler =
             let sessionService =
                 ctx.RequestServices.GetService(typeof<SessionService>) :?> SessionService
 
-            let candidateService =
-                ctx.RequestServices.GetService(typeof<CandidateService>) :?> CandidateService
-
             let! request = ThothSerializer.ReadBody ctx SetDiplomaRequest.decode
 
             match request with
             | Error e -> return! RequestErrors.BAD_REQUEST e next ctx
             | Ok { Diploma = diploma } ->
 
-                let minutes =
-                    Session.getSessionsForDiploma sessionService (CandidateName name, DiplomaKey diploma)
-                    |> Seq.map (fun (_, _, _, m) -> m)
-                    |> Seq.sum
+                let candidateService =
+                    ctx.RequestServices.GetService(typeof<CandidateService>) :?> CandidateService
 
-                let result =
-                    Candidate.setDiploma candidateService (CandidateName name, DiplomaKey diploma, minutes)
+                let candidate = Candidate.getOne candidateService (CandidateName name)
 
-                match result with
-                | Ok message -> return! text message next ctx
-                | Error e -> return! RequestErrors.BAD_REQUEST e next ctx
+                match candidate with
+                | None -> return! RequestErrors.NOT_FOUND $"No candidate found with name {name}" next ctx
+                | Some _ ->
+
+                    let minutes =
+                        Session.getSessionsForDiploma sessionService (CandidateName name, DiplomaKey diploma)
+                        |> Seq.map (fun (_, _, _, m) -> m)
+                        |> Seq.sum
+
+                    let result =
+                        Candidate.setDiploma candidateService (CandidateName name, DiplomaKey diploma, minutes)
+
+                    match result with
+                    | Ok message -> return! text message next ctx
+                    | Error e -> return! RequestErrors.BAD_REQUEST e next ctx
         }
 
 let addGuardian: HttpHandler =

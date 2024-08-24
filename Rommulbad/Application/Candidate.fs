@@ -39,4 +39,4 @@ module Candidate =
             candidateService.SetCandidateDiploma(CandidateName name, DiplomaKey diploma)
             Ok $"Diploma of participant {name} has been set to {diploma}"
         else
-            Error $"Invalid diploma type: {diploma}"
+            Error $"Invalid diploma type: {diploma} for minutes {minutes}"
